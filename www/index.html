@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//WAPFORUM//DTD XHTML Mobile 1.0//EN" "http://www.wapforum.org/DTD/xhtml-mobile10.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<title>WhatsBeer</title>
+<head>
+<!-- Include the PhoneGap library -->
+<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+
+<!-- Include meta tag to ensure proper rendering and touch zooming -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Include jQuery Mobile stylesheets -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+<!-- Include Custom stylesheets -->
+<link rel="stylesheet" type="text/css" href="css/whatsbeer.css">
+
+<!-- Include Ajax jQuery stylesheets -->
+<<script src="js/jquery.min.js"></script>
+<!-- Include the jQuery library -->
+<script src="js/jquery-1.12.4.min.js"></script>
+<!-- Include the jQuery Mobile library -->
+<script src="js/jquery.mobile-1.4.5.min.js"></script>
+<!-- Include the Custom library -->
+<script type="text/javascript" charset="utf-8" src="js/whatsbeer.js"></script>
+
+<!-- Include the Remote Console library -->
+<!--<script src="https://jsconsole.com/js/remote.js?0625db8c-c1df-4b09-a9f9-eea52017e361"></script>-->
+</head>
+	<body>
+		<div data-role="page" id="pageone">
+			<div data-role="header" data-position="fixed">
+				<img id="homebtn" src="img/back-arrow.gif" onclick="back()" style="display: none"/>
+				<h1>WhatsBeer</h1>
+				<img id="closebtn" src="img/close.png" onclick="$('#exitPopup').show();" />
+			</div>
+			<div id="index" data-role="main" class="ui-content">
+				<div id="loading" class ="loading_block">
+					<img id="load_img" src="img/loading-animation_small.gif"/>
+					<p>Loading...</p>
+				</div>	
+				<div id="response">
+					Placeholder
+				</div>
+			</div>
+			<div data-role="footer" style="text-align:center;" data-position="fixed">
+				<input id="selectedFile" data-role="none" type="file" accept="image/*" onchange="picChange(event)" style="display: none;"/>
+				<button id="btnPhoto" class="ui-btn ui-icon-camera ui-btn-icon-left" onclick="$('#chooseSource').show();">Upload or Take a Photo</button>
+			</div>
+			
+			<!-- Source Selection Popup -->
+			<div id="chooseSource" class="modal">
+				<!-- Popup content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="close" onclick="$('#chooseSource').hide();">x</span>
+						<h4>Select the source for the image</h4>
+					</div>
+					<div class="modal-body">
+						<button onclick="shootPhoto();">Take a Photo</button>
+						<button onclick="loadPhoto();">Load From Library</button>
+					</div>
+				</div>
+			</div>
+			<!--Popup End -->
+			
+			<!-- Exit Conrim Popup -->
+			<div id="exitPopup" class="modal">
+				<!-- Popup content -->
+				<div class="modal-content">
+				<div class="modal-header">
+					<span class="close" onclick="$('#exitPopup').hide();">x</span>
+					<h3>Are you sure want to Exit the App</h3>
+				</div>
+				<div class="modal-body">
+					<div data-role="navbar">
+						<ul>
+							<li><button onclick="close_window();">Ok</button></li>
+							<li><button onclick="$('#exitPopup').hide();">Cancel</button></li>
+						</ul>
+					</div>
+				</div>
+			  </div>
+			</div>
+			<!--Popup End -->
+		</div>
+	</body>
+</html>
