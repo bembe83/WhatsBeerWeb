@@ -67,7 +67,7 @@
 	<!-- Core plugins -->
     <plugin name="cordova-plugin-battery-status" />
     <!--<plugin name="cordova-plugin-camera" />-->
-	<plugin name="cordova-plugin-camera-with-exif" />
+	<!--<plugin name="cordova-plugin-camera-with-exif" />-->
 	<!--<plugin name="cordova-custom-config" />-->
 	<plugin name="cordova-plugin-media-capture" />
     <plugin name="cordova-plugin-console" />
@@ -88,7 +88,7 @@
 	
     <!-- Third party plugins -->
     <!-- A list of available plugins are available at https://http://cordova.apache.org/plugins/ -->
-	<!--<plugin spec="https://github.com/bembe83/cordova-plugin-camera.git" source="git" />-->
+	<plugin spec="https://github.com/bembe83/cordova-plugin-camera.git" source="git" />
 	
 	<platform name="android">
 		<!--<plugin spec="https://github.com/dpa99c/cordova-plugin-wezka-nativecamera.git" source="git" />-->
@@ -96,8 +96,8 @@
 	</platform>
 	
     <!-- Define app icon for each platform. -->
-    <icon src="icon.png" />
-	<splash src="img/splash.png" />
+    <icon src="www/icon.png" />
+	<splash src="www/img/splash.png" />
 	
 	<!--Define additional infos for platform configuration xmls-->
 	<!--<preference name="android-manifest/application/activity/@android:configChanges" value="orientation|keyboardHidden|screenSize" />-->
