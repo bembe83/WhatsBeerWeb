@@ -92,8 +92,9 @@ function getImage(source){
 				function(imageData){
 					//Success
 					console.log("getPicture(): Image successfully retrieved.");
-					//elaborate(imageData);
-					drawPhoto(imageData, "photo");
+					//console.log(imageData);
+					//drawPhoto("data:image/jpeg;base64,"+imageData, "photo");
+					elaborate(imageData);
 				},
 				function(message){
 					//Failed
@@ -159,7 +160,7 @@ function picChange(evt){
 					var fileReader = new FileReader();
 					fileReader.onload = function (event) {
 						console.log(event.target.result);
-						elaborate(event.target.result.replace("data:image/jpeg;base64,", ""));
+						elaborate(event.target.result..replace('/^data:image\/(png|jpg);base64,/', ''))
 					};
 					fileReader.readAsDataURL(fileInput[0]);
 				}catch(e)
