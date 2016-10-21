@@ -55,6 +55,17 @@ function onLoad(event){
 	else
 		$("#load_img").attr('width', width*0.66);
 	
+	$("#submit").click(function(e) {
+		var name = $("#name").val();
+		if (name === '') {
+			alert("Please insert a name!!");
+			e.preventDefault();
+		} else {
+			loading();
+			searchbeer(name);
+		}
+	});
+	
 	try{
 		$.ajax({
 			url : main_file,
@@ -94,6 +105,7 @@ function getImage(source){
 					console.log("getPicture(): Image successfully retrieved.");
 					//console.log(imageData);
 					//drawPhoto("data:image/jpeg;base64,"+imageData, "photo");
+					loading();
 					elaborate(imageData);
 				},
 				function(message){
@@ -121,7 +133,6 @@ function getImage(source){
 function picChange(evt){ 
 	try {
 		console.log("height:"+height+" width:"+width);
-		$("#response").html("");
 		loading();
 		//get files captured through input
 		var fileInput = evt.target.files;
@@ -160,7 +171,7 @@ function picChange(evt){
 					var fileReader = new FileReader();
 					fileReader.onload = function (event) {
 						console.log(event.target.result);
-						elaborate(event.target.result..replace('/^data:image\/(png|jpg);base64,/', ''))
+						elaborate(event.target.result.replace('/^data:image\/(png|jpg);base64,/', ''));
 					};
 					fileReader.readAsDataURL(fileInput[0]);
 				}catch(e)
@@ -217,7 +228,7 @@ function elaborate(content) {
 			data: request,
 			contentType: 'application/json'
 		}).fail(function(jqXHR, textStatus, errorThrown) {
-			showResult("ERRORS: " + textStatus + " " + errorThrown);
+			$('#nameRequest').show();
 			console.log("ERRORS: " + textStatus + " " + errorThrown);
 		}).done(function(data){
 			try{
@@ -250,7 +261,7 @@ function searchbeer(beerName)
 		var xhttp;
 		var ret_val;
 
-		console.log(method, reqURL);
+		console.log(method+":"+reqURL);
 		
 		$.get({
 			url: reqURL,
@@ -304,7 +315,7 @@ function searchbeer(beerName)
 
 	}catch(e)
 	{
-		showResult("searchbeer()"+e);
+		showResult("searchbeer():"+e);
 		console.log(e);
 	}
 	
@@ -338,16 +349,22 @@ function drawPhoto(objPhoto, canvasName){
 
 function showResult(result){
 	$("#loading").hide();
+	$("#btnPhoto").hide();
 	$("#homebtn").show();
+	$("#choosesource").hide();
+	$('#nameRequest').hide();
+	$('#exitPopup').hide();
 	$("#response").html(result).enhanceWithin();
 	$("#selectedFile").replaceWith($("#selectedFile").val('').clone(true));
 }
 
 function showHome(){
 	$("#loading").hide();
+	$("#btnPhoto").show();
 	$("#homebtn").hide();
 	$("#choosesource").hide();
-	$("#btnPhoto").show();
+	$('#nameRequest').hide();
+	$('#exitPopup').hide();
 	$("#response").html(main_text).enhanceWithin();
 	$("#selectedFile").replaceWith($("#selectedFile").val('').clone(true));
 }
@@ -355,6 +372,10 @@ function showHome(){
 function loading(){
 	$("#loading").show();
 	$("#btnPhoto").hide();
+	$("#homebtn").hide();
+	$("#choosesource").hide();
+	$('#nameRequest').hide();
+	$('#exitPopup').hide();
 	$("#response").html("").enhanceWithin();
 }
 

@@ -61,7 +61,7 @@
 			</div>
 			<!--Popup End -->
 			
-			<!-- Exit Conrim Popup -->
+			<!-- Exit Confirm Popup -->
 			<div id="exitPopup" class="modal">
 				<!-- Popup content -->
 				<div class="modal-content">
@@ -80,6 +80,26 @@
 			  </div>
 			</div>
 			<!--Popup End -->
+			
+			<!-- Beer Name Popup -->
+			<div id="nameRequest" class="modal">
+				<!-- Popup content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="close" onclick="$('#exitPopup').hide();">x</span>
+						<h3>No value found for the picture.<br />Enter the name manually</h3>
+					</div>
+					<div class="modal-body">
+						<form action="" method="post">
+							<label>Enter the beer name:</label>
+							<input id="name" name="name" type="text">
+							<input id="submit" type="submit" value="Search">
+						</form>
+					</div>
+				</div>
+			</div>
+			<!--Popup End -->
+			
 		</div>
 	</body>
 </html>
