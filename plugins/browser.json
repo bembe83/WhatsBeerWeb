@@ -1,0 +1,66 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-battery-status": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-media-capture": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-contacts": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-device-motion": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-device-orientation": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-globalization": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "cordova-plugin-vibration": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        },
+        "undefined": {
+            "PACKAGE_NAME": "com.whatsbeer.tk"
+        }
+    },
+    "dependent_plugins": {}
+}

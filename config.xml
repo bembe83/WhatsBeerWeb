@@ -90,11 +90,6 @@
     <!-- A list of available plugins are available at https://http://cordova.apache.org/plugins/ -->
 	<plugin spec="https://github.com/bembe83/cordova-plugin-camera.git" source="git" />
 	
-	<platform name="android">
-		<!--<plugin spec="https://github.com/dpa99c/cordova-plugin-wezka-nativecamera.git" source="git" />-->
-		<!--<plugin name="Gallery" spec="https://github.com/econejer/ForegroundCameraGallery.git" source="git" />-->
-	</platform>
-	
     <!-- Define app icon for each platform. -->
     <icon src="www/icon.png" />
 	<splash src="www/img/splash.png" />
@@ -104,6 +99,10 @@
 	
 	<gap:config-file platform="android" parent="/manifest">
 	
+		<uses-permission android:name="android.permission.CAMERA" />
+		<uses-permission android:name="android.permission.INTERNET" />
+		<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+		<uses-permission android:name="android.permission.READ_PHONE_STATE" />
 		<uses-permission android:name="android.permission.BLUETOOTH"/>
 		<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
 		
@@ -130,8 +129,11 @@
     <access origin="*"/>
     <!-- Added the following intents to support the removal of whitelist code from base cordova to a plugin -->
     <!-- Whitelist configuration. Refer to https://cordova.apache.org/docs/en/edge/guide_appdev_whitelist_index.md.html -->
+	<plugin name="cordova-plugin-whitelist" version="1" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
+	<allow-intent href="http:*" />
+	<allow-intent href="https:*" />
     <allow-intent href="tel:*" />
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />

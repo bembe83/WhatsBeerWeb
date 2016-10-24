@@ -86,14 +86,14 @@
 				<!-- Popup content -->
 				<div class="modal-content">
 					<div class="modal-header">
-						<span class="close" onclick="$('#exitPopup').hide();">x</span>
+						<span class="close" onclick="$('#nameRequest').hide();">x</span>
 						<h3>No value found for the picture.<br />Enter the name manually</h3>
 					</div>
 					<div class="modal-body">
 						<form action="" method="post">
 							<label>Enter the beer name:</label>
 							<input id="name" name="name" type="text">
-							<input id="submit" type="submit" value="Search">
+							<input id="submit" type="submit" value="Search" onclick="askBeerName(event)">
 						</form>
 					</div>
 				</div>

@@ -51,21 +51,10 @@ $(document).ready(onLoad);
 
 function onLoad(event){
 	if(width > height)
-		$("#load_img").attr('height', height*0.5);
+		$('#load_img').attr('height', height*0.5);
 	else
-		$("#load_img").attr('width', width*0.66);
-	
-	$("#submit").click(function(e) {
-		var name = $("#name").val();
-		if (name === '') {
-			alert("Please insert a name!!");
-			e.preventDefault();
-		} else {
-			loading();
-			searchbeer(name);
-		}
-	});
-	
+		$('#load_img').attr('width', width*0.66);
+		
 	try{
 		$.ajax({
 			url : main_file,
@@ -78,8 +67,20 @@ function onLoad(event){
 	}catch(e)
 	{
 		console.log("load():"+e);
-		main_text = $("#response").html();
+		main_text = $('#response').html();
 		showHome();
+	}
+}
+
+function askBeerName(e)
+{
+	var name = $("#name").val();
+	if (name === '') {
+		alert("Please insert a name!!");
+		e.preventDefault();
+	} else {
+		loading();
+		searchbeer(name);
 	}
 }
 
@@ -121,7 +122,7 @@ function getImage(source){
 				});
 		}else{
 			console.log("getImage(): no camera defined.");
-			$("#selectedFile").click();
+			$('#selectedFile').click();
 		}				
 	}catch (e)
 	{
@@ -133,7 +134,6 @@ function getImage(source){
 function picChange(evt){ 
 	try {
 		console.log("height:"+height+" width:"+width);
-		loading();
 		//get files captured through input
 		var fileInput = evt.target.files;
 		console.log($("#selectedFile").val());
@@ -171,7 +171,7 @@ function picChange(evt){
 					var fileReader = new FileReader();
 					fileReader.onload = function (event) {
 						console.log(event.target.result);
-						elaborate(event.target.result.replace('/^data:image\/(png|jpg);base64,/', ''));
+						elaborate(event.target.result);
 					};
 					fileReader.readAsDataURL(fileInput[0]);
 				}catch(e)
@@ -205,6 +205,7 @@ function back()
 function elaborate(content) {
 	
 	try{
+		loading();
 		var ret_val;
 		// Strip out the file prefix when you convert to json.
 		var request =  '{' +
@@ -236,15 +237,7 @@ function elaborate(content) {
 				searchbeer(beer_name);
 			} catch(e)
 			{
-				showResult(main_text);
-				var beer_name = prompt("Logo not recognized!\n Please enter the name of the beer", "");
-				loading();
-				if(beer_name)
-					searchbeer(beer_name);
-				else
-				{
-					showResult("No beer name inserted");
-				}
+				$('#nameRequest').show();
 			}
 		});
 	}catch(e){
@@ -303,23 +296,22 @@ function searchbeer(beerName)
 					
 					showResult(descript);
 				}catch(e){
-						showResult(e);
+						showResult("searchbeer():"+e);
 						console.log(e);
 				}					
 			},
 			error: function(xhr, textStatus, errorMessage){
-				showResult(beerName);
-				console.log(errorMessage);
+				showResult("searchbeer():"+beerName);
+				console.log("searchbeer():"+errorMessage);
 			}
 		});
 
 	}catch(e)
 	{
 		showResult("searchbeer():"+e);
-		console.log(e);
+		console.log("searchbeer():"+e);
 	}
 	
-	return ret_val;
 }
 
 function drawPhoto(objPhoto, canvasName){
@@ -348,35 +340,37 @@ function drawPhoto(objPhoto, canvasName){
 }
 
 function showResult(result){
-	$("#loading").hide();
-	$("#btnPhoto").hide();
-	$("#homebtn").show();
-	$("#choosesource").hide();
+	$('#response').show();
+	$('#response').html(result).enhanceWithin();
+	$('#loading').hide();
+	$('#btnPhoto').hide();
+	$('#homebtn').show();
+	$('#choosesource').hide();
 	$('#nameRequest').hide();
 	$('#exitPopup').hide();
-	$("#response").html(result).enhanceWithin();
-	$("#selectedFile").replaceWith($("#selectedFile").val('').clone(true));
+	$('#selectedFile').replaceWith($('#selectedFile').val('').clone(true));
 }
 
 function showHome(){
-	$("#loading").hide();
-	$("#btnPhoto").show();
-	$("#homebtn").hide();
-	$("#choosesource").hide();
+	$('#response').show();
+	$('#response').html(main_text).enhanceWithin();
+	$('#loading').hide();
+	$('#btnPhoto').show();
+	$('#homebtn').hide();
+	$('#choosesource').hide();
 	$('#nameRequest').hide();
 	$('#exitPopup').hide();
-	$("#response").html(main_text).enhanceWithin();
-	$("#selectedFile").replaceWith($("#selectedFile").val('').clone(true));
+	$('#selectedFile').replaceWith($('#selectedFile').val('').clone(true));
 }
 
 function loading(){
-	$("#loading").show();
-	$("#btnPhoto").hide();
-	$("#homebtn").hide();
-	$("#choosesource").hide();
+	$('#response').hide();
+	$('#loading').show();
+	$('#btnPhoto').hide();
+	$('#homebtn').hide();
+	$('#choosesource').hide();
 	$('#nameRequest').hide();
 	$('#exitPopup').hide();
-	$("#response").html("").enhanceWithin();
 }
 
 function close_window() {
