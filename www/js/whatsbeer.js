@@ -63,10 +63,8 @@ function onLoad(event){
 		if(width > height)
 		{
 			$('#load_img').attr('height', height/2);
-			$(".modal").css("padding-top", height/4);
 		}else{
 			$('#load_img').attr('width', width*0.66);
-			$(".modal").css("padding-top", width/3);
 		}
 		
 		$.ajax({
