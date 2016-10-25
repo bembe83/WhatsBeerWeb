@@ -1,3 +1,7 @@
+.ui-navbar ul li:last-child .ui-btn {
+    border-right-width: 1px !important;
+}
+
 .ui-page .ui-header {
     background-color: #ffcc00 !important;
 	font-size: 1.5em !important;

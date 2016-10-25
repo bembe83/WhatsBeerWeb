@@ -45,28 +45,45 @@ window.addEventListener('popstate', function(event) {
 
 }, false);
 
+$(window).on('resize', function(){
+   // If the current active element is a text input, we can assume the soft keyboard is visible.
+   if($(document.activeElement).prop('type') === 'text') {
+      $(".modal").css("position","relative");
+   } else {
+      $(".modal").css("position","fixed");
+   }
+});
+
 document.addEventListener("deviceready", onLoad , false);
 
 $(document).ready(onLoad);
 
 function onLoad(event){
-	if(width > height)
-		$('#load_img').attr('height', height*0.5);
-	else
-		$('#load_img').attr('width', width*0.66);
-		
 	try{
+		if(width > height)
+		{
+			$('#load_img').attr('height', height/2);
+			$(".modal").css("padding-top", height/4);
+		}else{
+			$('#load_img').attr('width', width*0.66);
+			$(".modal").css("padding-top", width/3);
+		}
+		
 		$.ajax({
 			url : main_file,
 			async:false,
 			success : function(result){
 						main_text = result;
 						showHome();
-					} 
+					},
+			error : function(){
+					main_text = $('#response').html();	
+			},
+			complete: showHome
 		});
 	}catch(e)
 	{
-		console.log("load():"+e);
+		console.log("onLoad():"+e);
 		main_text = $('#response').html();
 		showHome();
 	}
@@ -79,6 +96,7 @@ function askBeerName(e)
 		alert("Please insert a name!!");
 		e.preventDefault();
 	} else {
+		$("#name").val('');
 		loading();
 		searchbeer(name);
 	}
@@ -203,7 +221,6 @@ function back()
 }
 
 function elaborate(content) {
-	
 	try{
 		loading();
 		var ret_val;
@@ -224,25 +241,30 @@ function elaborate(content) {
 		']' +
 		'}';
 
-		$.post({
+		$.ajax({
+			type: 'POST',
 			url: CV_URL,
 			data: request,
-			contentType: 'application/json'
-		}).fail(function(jqXHR, textStatus, errorThrown) {
-			$('#nameRequest').show();
-			console.log("ERRORS: " + textStatus + " " + errorThrown);
-		}).done(function(data){
-			try{
-				var beer_name = data.responses[0].logoAnnotations[0].description;
-				searchbeer(beer_name);
-			} catch(e)
-			{
+			dataType: 'json',
+			contentType: 'application/json; charset=utf-8',
+			success: function(data, textStatus, jqXHR) {
+				try{
+					var beer_name = data.responses[0].logoAnnotations[0].description;
+					searchbeer(beer_name);
+				} catch(e)
+				{
+					console.log("elaborate(): Exception thrown retrieving results:"+e);
+					$('#nameRequest').show();
+				}
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				console.log("elaborate() post request error: " + jqXHR.status + " " + jqXHR.responseText);
 				$('#nameRequest').show();
 			}
-		});
+		}); 
 	}catch(e){
-		showResult("sendFileToCloudVision():"+e);
-		console.log("sendFileToCloudVision():"+e);
+		showResult("elaborate():"+e);
+		console.log("elaborate():"+e);
 	}
 }
 
@@ -253,15 +275,17 @@ function searchbeer(beerName)
 		var method = "GET";
 		var xhttp;
 		var ret_val;
+		var descript = "No Beer Found with name <b>"+beerName+"</b>";
 
 		console.log(method+":"+reqURL);
 		
-		$.get({
+		$.ajax({
+			type: method,
 			url: reqURL,
-			success: function(data) {
-				var json = JSON.parse(data);
+			dataType: 'json',
+			success: function(json, textStatus, jqXHR) {
 				try{
-					var descript = "No Beer Found with name <b>"+beerName+"</b>";
+					//var json = JSON.parse(JSON.stringify(data));
 					var logo_img_tag = "<img class=\"beer_logo\" src=\"<src>\" />";
 					if(json.status == "success")
 					{
@@ -296,20 +320,20 @@ function searchbeer(beerName)
 					
 					showResult(descript);
 				}catch(e){
-						showResult("searchbeer():"+e);
-						console.log(e);
+					showResult(descript+"\nException:"+e);
+					console.log("searchbeer(): REST request Exception:"+e);
 				}					
 			},
-			error: function(xhr, textStatus, errorMessage){
-				showResult("searchbeer():"+beerName);
-				console.log("searchbeer():"+errorMessage);
+			error: function(jqXHR, textStatus, errorThrown){
+				showResult(descript);
+				console.log("searchbeer() get request error: " + jqXHR.status + " " + jqXHR.responseText);
 			}
 		});
 
 	}catch(e)
 	{
 		showResult("searchbeer():"+e);
-		console.log("searchbeer():"+e);
+		console.log("Exception in searchbeer():"+e);
 	}
 	
 }
@@ -363,7 +387,7 @@ function showHome(){
 	$('#selectedFile').replaceWith($('#selectedFile').val('').clone(true));
 }
 
-function loading(){
+function loading(){	
 	$('#response').hide();
 	$('#loading').show();
 	$('#btnPhoto').hide();

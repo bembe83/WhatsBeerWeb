@@ -2,6 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <title>WhatsBeer</title>
 <head>
+<meta http-equiv="Content-Security-Policy" content="default-src * data: gap: 'unsafe-eval'; 
+													style-src 'self' 'unsafe-inline';
+													script-src * 'unsafe-inline' 'unsafe-eval';
+													media-src *;">
+
 <!-- Include the PhoneGap library -->
 <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 
@@ -13,7 +18,7 @@
 <link rel="stylesheet" type="text/css" href="css/whatsbeer.css">
 
 <!-- Include Ajax jQuery stylesheets -->
-<<script src="js/jquery.min.js"></script>
+<<script src="js/jquery-2.2.2.min.js"></script>
 <!-- Include the jQuery library -->
 <script src="js/jquery-1.12.4.min.js"></script>
 <!-- Include the jQuery Mobile library -->
@@ -72,8 +77,8 @@
 				<div class="modal-body">
 					<div data-role="navbar">
 						<ul>
-							<li><button onclick="close_window();">Ok</button></li>
-							<li><button onclick="$('#exitPopup').hide();">Cancel</button></li>
+							<li><a href="#" onclick="close_window();">Ok</a></li>
+							<li><a href="#" onclick="$('#exitPopup').hide();">Cancel</a></li>
 						</ul>
 					</div>
 				</div>
@@ -86,15 +91,13 @@
 				<!-- Popup content -->
 				<div class="modal-content">
 					<div class="modal-header">
-						<span class="close" onclick="$('#nameRequest').hide();">x</span>
-						<h3>No value found for the picture.<br />Enter the name manually</h3>
+						<span class="close" onclick="showHome();">x</span>
+						<h3>No value found for the picture.</h3>
 					</div>
 					<div class="modal-body">
-						<form action="" method="post">
-							<label>Enter the beer name:</label>
-							<input id="name" name="name" type="text">
-							<input id="submit" type="submit" value="Search" onclick="askBeerName(event)">
-						</form>
+						<p>Enter the beer name:</p>
+						<input id="name" name="name" type="text">
+						<button onclick="askBeerName(event)">Search</button>
 					</div>
 				</div>
 			</div>
