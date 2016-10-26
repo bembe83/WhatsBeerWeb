@@ -45,12 +45,21 @@ window.addEventListener('popstate', function(event) {
 
 }, false);
 
+window.addEventListener('offline', function(event) {
+	alert('No internet connection so the functionality will remain disable till the connection will be active again!');
+	$('#btnPhoto').click(function() {alert('No internet connection so the functionality will remain disable till the connection will be active again!');});
+}, false);
+
+window.addEventListener('online', function(event) {
+	$('#btnPhoto').click(function() {$('#chooseSource').show();});
+}, false);
+
 $(window).on('resize', function(){
    // If the current active element is a text input, we can assume the soft keyboard is visible.
    if($(document.activeElement).prop('type') === 'text') {
-      $(".modal").css("position","relative");
+      $('.modal-content').css("margin-top","20%");
    } else {
-      $(".modal").css("position","fixed");
+      $('modal-content').css("position","20%");
    }
 });
 
@@ -60,13 +69,15 @@ $(document).ready(onLoad);
 
 function onLoad(event){
 	try{
+		var networkState = navigator.network.connection.type;
+		
 		if(width > height)
 		{
 			$('#load_img').attr('height', height/2);
 		}else{
 			$('#load_img').attr('width', width*0.66);
 		}
-		
+			
 		$.ajax({
 			url : main_file,
 			async:false,
@@ -79,6 +90,7 @@ function onLoad(event){
 			},
 			complete: showHome
 		});
+
 	}catch(e)
 	{
 		console.log("onLoad():"+e);
