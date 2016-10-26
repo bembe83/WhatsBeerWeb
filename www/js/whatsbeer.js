@@ -57,9 +57,10 @@ window.addEventListener('online', function(event) {
 $(window).on('resize', function(){
    // If the current active element is a text input, we can assume the soft keyboard is visible.
    if($(document.activeElement).prop('type') === 'text') {
-      $('.modal-content').css("margin-top","20%");
+	   alert('Keyboard opened');
+      $('.modal-content').css("padding-top",'20%');
    } else {
-      $('modal-content').css("position","20%");
+      $('modal-content').css("padding-top",'30%');
    }
 });
 
