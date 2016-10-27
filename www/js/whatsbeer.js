@@ -47,22 +47,15 @@ window.addEventListener('popstate', function(event) {
 
 window.addEventListener('offline', function(event) {
 	alert('No internet connection so the functionality will remain disable till the connection will be active again!');
-	$('#btnPhoto').click(function() {alert('No internet connection so the functionality will remain disable till the connection will be active again!');});
+	$('#btnPhoto').click(function() {
+		$('#chooseSource').hide();
+		alert('No internet connection so the functionality will remain disable till the connection will be active again!');
+	});
 }, false);
 
 window.addEventListener('online', function(event) {
 	$('#btnPhoto').click(function() {$('#chooseSource').show();});
 }, false);
-
-$(window).on('resize', function(){
-   // If the current active element is a text input, we can assume the soft keyboard is visible.
-   if($(document.activeElement).prop('type') === 'text') {
-	   alert('Keyboard opened');
-      $('.modal-content').css("padding-top",'20%');
-   } else {
-      $('modal-content').css("padding-top",'30%');
-   }
-});
 
 document.addEventListener("deviceready", onLoad , false);
 
@@ -70,15 +63,19 @@ $(document).ready(onLoad);
 
 function onLoad(event){
 	try{
-		var networkState = navigator.network.connection.type;
-		
-		if(width > height)
-		{
-			$('#load_img').attr('height', height/2);
-		}else{
-			$('#load_img').attr('width', width*0.66);
+		//var networkState = navigator.network.connection.type;
+				
+		if(screen.width > screen.height){
+			height = screen.width;
+			width = screen.height;
 		}
-			
+		
+		$('#load_img').attr('width', width * 0.6);
+		$('.modal').css('padding-top', height / 3);
+		
+		$('#name').focusin( function () { $('.modal').css('padding-top', height/6); });
+		$('#name').focusout(function () { $('.modal').css('padding-top', height/3); });
+		
 		$.ajax({
 			url : main_file,
 			async:false,
@@ -91,12 +88,10 @@ function onLoad(event){
 			},
 			complete: showHome
 		});
-
+		
 	}catch(e)
 	{
 		console.log("onLoad():"+e);
-		main_text = $('#response').html();
-		showHome();
 	}
 }
 

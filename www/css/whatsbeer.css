@@ -17,6 +17,10 @@
 	border: 0 !important;
 }
 
+.loading_block{
+		display: none;
+}
+
 #homebtn {
 	position: absolute;
 	top: 0;
@@ -62,7 +66,7 @@
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 30%; /* Location of the box */
+    padding-top: 40%; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */
