@@ -15,6 +15,7 @@ var logo = "img/ic_launcher.png";
 var tts_ico = "img/ic_tts.png";
 
 var main_text;
+var browser = false;
 
 var time = 0;
 
@@ -54,7 +55,12 @@ window.addEventListener('offline', function(event) {
 }, false);
 
 window.addEventListener('online', function(event) {
-	$('#btnPhoto').click(function() {$('#chooseSource').show();});
+	$('#btnPhoto').click(function() {
+		if(browser)
+			$('#selectedFile').click();	
+		else
+			$('#chooseSource').show();
+		});
 }, false);
 
 document.addEventListener("deviceready", onLoad , false);
@@ -88,6 +94,17 @@ function onLoad(event){
 			},
 			complete: showHome
 		});
+		
+		if(camera == undefined)
+		{
+			browser = true;
+			$('#btnPhoto').click(function() {
+				if(browser)
+					$('#selectedFile').click();	
+				else
+					$('#chooseSource').show();
+				});
+		}
 		
 	}catch(e)
 	{
@@ -129,7 +146,7 @@ function getImage(source){
 					//Success
 					console.log("getPicture(): Image successfully retrieved.");
 					//console.log(imageData);
-					//drawPhoto("data:image/jpeg;base64,"+imageData, "photo");
+					drawPhoto("data:image/jpeg;base64,"+imageData, "photo");
 					loading();
 					elaborate(imageData);
 				},

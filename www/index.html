@@ -37,10 +37,6 @@
 				<img id="closebtn" src="img/close.png" onclick="$('#exitPopup').show();" />
 			</div>
 			<div id="index" data-role="main" class="ui-content">
-				<div id="loading" class ="loading_block">
-					<img id="load_img" src="img/loading-animation_small.gif"/>
-					<p>Loading...</p>
-				</div>	
 				<div id="response">
 				</div>
 			</div>
@@ -48,6 +44,16 @@
 				<input id="selectedFile" data-role="none" type="file" accept="image/*" onchange="picChange(event)" style="display: none;"/>
 				<button id="btnPhoto" class="ui-btn ui-icon-camera ui-btn-icon-left">Upload or Take a Photo</button>
 			</div>
+			
+			<!-- Loading Popup -->
+			<div id="loading" class="modal">
+				<!-- Popup content -->
+				<div class="modal-content">
+					<img id="load_img" src="img/loading-animation_small.gif"/>
+					<p>Loading...</p>
+				</div>
+			</div>
+			<!--Popup End -->
 			
 			<!-- Source Selection Popup -->
 			<div id="chooseSource" class="modal">
