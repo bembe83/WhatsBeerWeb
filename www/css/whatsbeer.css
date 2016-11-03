@@ -18,7 +18,11 @@
 }
 
 .loading_block{
-		display: none;
+	display: none;
+}
+
+#photo{
+	display: none;
 }
 
 #homebtn {
@@ -55,7 +59,9 @@
 		font-size:75%;
 }
 
-.loading_block {
+#loading_text {
+	color: white;
+    text-shadow: 2px 2px #000000;
 	text-align: center;
 	font-size: 1.5em;
 }

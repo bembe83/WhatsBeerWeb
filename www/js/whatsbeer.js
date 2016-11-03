@@ -12,6 +12,7 @@ var max_results = 1;
 
 var main_file = "main.html";
 var logo = "img/ic_launcher.png";
+var logo_image;
 var tts_ico = "img/ic_tts.png";
 
 var main_text;
@@ -106,6 +107,12 @@ function onLoad(event){
 				});
 		}
 		
+		loadImageFromFile(logo, function(imageData){
+			logo_image = imageData;
+			drawPhoto(logo_image, "photo");
+		});
+		
+		
 	}catch(e)
 	{
 		console.log("onLoad():"+e);
@@ -146,7 +153,7 @@ function getImage(source){
 					//Success
 					console.log("getPicture(): Image successfully retrieved.");
 					//console.log(imageData);
-					drawPhoto("data:image/jpeg;base64,"+imageData, "photo");
+					drawPhoto("data:image/jpeg;base64,"+imageData.replace("data:image/jpeg;base64,", ""), "photo");
 					loading();
 					elaborate(imageData);
 				},
@@ -183,7 +190,11 @@ function picChange(evt){
 			var windowURL = window.URL || window.webkitURL;
 			//picture url
 			try{
-				console.log("createObjectURL");
+				loadImageFromFile(fileInput[0], function(imageData)
+				{
+					elaborate(imageData);
+				});
+				/*console.log("createObjectURL");
 				var picURL = windowURL.createObjectURL(fileInput[0]);
 				console.log("URL created " + picURL);
 				
@@ -204,6 +215,7 @@ function picChange(evt){
 					reader.readAsDataURL(returnedBlob); //Convert the blob from clipboard to base64
 				};
 				xhr.send();
+				*/
 			}
 			catch (e)
 			{
@@ -230,6 +242,32 @@ function picChange(evt){
 	}catch(e){
 		showResult("picChange():"+e);
 		console.log("picChange():"+e);
+	}
+}
+
+function loadImageFromFile(filename, callback)
+{
+	try{
+		var image = new Image();
+
+		image.onload = function () {
+			var canvas = document.createElement('canvas');
+			canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+			canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+	
+			canvas.getContext('2d').drawImage(this, 0, 0);
+	
+			// Get raw image data
+			//callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
+			// ... or get as Data URI
+			callback(canvas.toDataURL('image/png'));
+		};
+	
+		image.src = url;
+	}
+	catch (e)
+	{
+		console.log("loadImageFromFile():"+e);
 	}
 }
 
@@ -377,6 +415,7 @@ function drawPhoto(objPhoto, canvasName){
 			console.log("ratio:"+ratio);
 			//draw photo into canvas when ready
 			ctx.drawImage(photo, 0, 0, canvas.width, canvas.height*ratio);
+			ctx.drawImage(logo_image, 0, 0, 150, 150);
 		}catch(e){
 			console.log("onload():"+e);
 		}
@@ -390,6 +429,7 @@ function showResult(result){
 	$('#response').show();
 	$('#response').html(result).enhanceWithin();
 	$('#loading').hide();
+	$('#photo').hide();
 	$('#btnPhoto').hide();
 	$('#homebtn').show();
 	$('#choosesource').hide();
@@ -402,6 +442,7 @@ function showHome(){
 	$('#response').show();
 	$('#response').html(main_text).enhanceWithin();
 	$('#loading').hide();
+	$('#photo').show();
 	$('#btnPhoto').show();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
@@ -413,6 +454,7 @@ function showHome(){
 function loading(){	
 	$('#response').hide();
 	$('#loading').show();
+	$('#photo').show();
 	$('#btnPhoto').hide();
 	$('#homebtn').hide();
 	$('#choosesource').hide();

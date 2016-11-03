@@ -38,6 +38,7 @@
 			</div>
 			<div id="index" data-role="main" class="ui-content">
 				<div id="response">
+				<canvas id="photo"></canvas>
 				</div>
 			</div>
 			<div data-role="footer" style="text-align:center;" data-position="fixed">
@@ -48,9 +49,9 @@
 			<!-- Loading Popup -->
 			<div id="loading" class="modal">
 				<!-- Popup content -->
-				<div class="modal-content">
+				<div class="modal-content" style="background-color: rgba(0,0,0,0); text-align=center;">
 					<img id="load_img" src="img/loading-animation_small.gif"/>
-					<p>Loading...</p>
+					<p id="loading_text">Loading...</p>
 				</div>
 			</div>
 			<!--Popup End -->
