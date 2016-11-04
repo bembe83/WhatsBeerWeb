@@ -34,7 +34,7 @@ window.addEventListener('popstate', function(event) {
 		}
 		else
 		{
-			$('#exitPopup').show();
+			$('#closebtn').click();
 			time = 0;
 		}
     } else {
@@ -70,7 +70,6 @@ $(document).ready(onLoad);
 
 function onLoad(event){
 	try{
-		//var networkState = navigator.network.connection.type;
 				
 		if(screen.width > screen.height){
 			height = screen.width;
@@ -96,7 +95,7 @@ function onLoad(event){
 			complete: showHome
 		});
 		
-		if(camera == undefined)
+		if(typeof navigator.camera === 'undefined')
 		{
 			browser = true;
 			$('#btnPhoto').click(function() {
@@ -109,12 +108,11 @@ function onLoad(event){
 		
 		loadImageFromFile(logo, function(imageData){
 			logo_image = imageData;
-			drawPhoto(logo_image, "photo");
 		});
-		
-		
+				
 	}catch(e)
 	{
+		showError("onLoad():"+e);
 		console.log("onLoad():"+e);
 	}
 }
@@ -159,8 +157,8 @@ function getImage(source){
 				},
 				function(message){
 					//Failed
+					showError("getPicture() not worked:"+message);
 					console.log("getPicture() not worked:"+message);
-					showResult("getPicture() not worked:"+message);
 				},
 				{	quality: 50,
 					sourceType: source,
@@ -174,7 +172,7 @@ function getImage(source){
 		}				
 	}catch (e)
 	{
-		showResult("getImage():" + e);
+		showError("getImage():" + e);
 		console.log("getImage():" + e);
 	}
 }
@@ -190,7 +188,7 @@ function picChange(evt){
 			var windowURL = window.URL || window.webkitURL;
 			//picture url
 			try{
-				loadImageFromFile(fileInput[0], function(imageData)
+				loadImageFromFile(windowURL.createObjectURL(fileInput[0]), function(imageData)
 				{
 					elaborate(imageData);
 				});
@@ -229,7 +227,7 @@ function picChange(evt){
 					fileReader.readAsDataURL(fileInput[0]);
 				}catch(e)
 				{
-					showResult("FileReader()" + e);
+					showError("FileReader()" + e);
 					console.log(e);
 				}
 			}
@@ -240,34 +238,8 @@ function picChange(evt){
 			*/
 		}
 	}catch(e){
-		showResult("picChange():"+e);
+		showError("picChange():"+e);
 		console.log("picChange():"+e);
-	}
-}
-
-function loadImageFromFile(filename, callback)
-{
-	try{
-		var image = new Image();
-
-		image.onload = function () {
-			var canvas = document.createElement('canvas');
-			canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
-			canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
-	
-			canvas.getContext('2d').drawImage(this, 0, 0);
-	
-			// Get raw image data
-			//callback(canvas.toDataURL('image/png').replace(/^data:image\/(png|jpg);base64,/, ''));
-			// ... or get as Data URI
-			callback(canvas.toDataURL('image/png'));
-		};
-	
-		image.src = url;
-	}
-	catch (e)
-	{
-		console.log("loadImageFromFile():"+e);
 	}
 }
 
@@ -277,6 +249,7 @@ function back()
 		showHome();
 	}catch(e)
 	{
+		showError("back():"+e);
 		console.log("back():"+e);
 	}
 }
@@ -315,16 +288,16 @@ function elaborate(content) {
 				} catch(e)
 				{
 					console.log("elaborate(): Exception thrown retrieving results:"+e);
-					$('#nameRequest').show();
+					$('#nameRequestPopup').show();
 				}
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
 				console.log("elaborate() post request error: " + jqXHR.status + " " + jqXHR.responseText);
-				$('#nameRequest').show();
+				$('#nameRequestPopup').show();
 			}
 		}); 
 	}catch(e){
-		showResult("elaborate():"+e);
+		showError("elaborate():"+e);
 		console.log("elaborate():"+e);
 	}
 }
@@ -381,22 +354,43 @@ function searchbeer(beerName)
 					
 					showResult(descript);
 				}catch(e){
-					showResult(descript+"\nException:"+e);
+					showError(descript+"\nException:"+e);
 					console.log("searchbeer(): REST request Exception:"+e);
 				}					
 			},
 			error: function(jqXHR, textStatus, errorThrown){
-				showResult(descript);
+				showError(descript);
 				console.log("searchbeer() get request error: " + jqXHR.status + " " + jqXHR.responseText);
 			}
 		});
 
 	}catch(e)
 	{
-		showResult("searchbeer():"+e);
+		showError("searchbeer():"+e);
 		console.log("Exception in searchbeer():"+e);
 	}
 	
+}
+
+function loadImageFromFile(filename, callback)
+{
+	try{
+		var image = new Image();
+		
+		image.onload = function () {
+			var canvas = document.createElement('canvas');
+			canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
+			canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
+			canvas.getContext('2d').drawImage(this, 0, 0);
+			callback(canvas.toDataURL('image/png'));
+		};
+		image.src = filename;
+	}
+	catch (e)
+	{
+		showError("loadImageFromFile():"+e);
+		console.log("loadImageFromFile():"+e);
+	}
 }
 
 function drawPhoto(objPhoto, canvasName){
@@ -413,15 +407,13 @@ function drawPhoto(objPhoto, canvasName){
 		try{
 			var ratio = (photo.width/photo.height);
 			console.log("ratio:"+ratio);
-			//draw photo into canvas when ready
 			ctx.drawImage(photo, 0, 0, canvas.width, canvas.height*ratio);
-			ctx.drawImage(logo_image, 0, 0, 150, 150);
+			ctx.drawImage(logo_image, 0, 0, 50, 50);
 		}catch(e){
 			console.log("onload():"+e);
 		}
 	}
 	
-	//load photo into canvas
 	photo.src = objPhoto;
 }
 
@@ -433,8 +425,9 @@ function showResult(result){
 	$('#btnPhoto').hide();
 	$('#homebtn').show();
 	$('#choosesource').hide();
-	$('#nameRequest').hide();
+	$('#nameRequestPopup').hide();
 	$('#exitPopup').hide();
+	$('#errorPopup').hide();
 	$('#selectedFile').replaceWith($('#selectedFile').val('').clone(true));
 }
 
@@ -446,8 +439,9 @@ function showHome(){
 	$('#btnPhoto').show();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
-	$('#nameRequest').hide();
+	$('#nameRequestPopup').hide();
 	$('#exitPopup').hide();
+	$('#errorPopup').hide();
 	$('#selectedFile').replaceWith($('#selectedFile').val('').clone(true));
 }
 
@@ -458,7 +452,29 @@ function loading(){
 	$('#btnPhoto').hide();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
-	$('#nameRequest').hide();
+	$('#nameRequestPopup').hide();
+	$('#errorPopup').hide();
+	$('#exitPopup').hide();
+}
+
+function showError(message){	
+	$('#response').hide();
+	$('#loading').hide();
+	$('#photo').hide();
+	$('#btnPhoto').hide();
+	$('#homebtn').hide();
+	$('#choosesource').hide();
+	$('#nameRequestPopup').hide();
+	$('#errorPopup').show();
+	$('#errorMessage').html(message).enhanceWithin();
+	$('#exitPopup').hide();
+}
+
+function hideAllPopup(){	
+	$('#loading').hide();
+	$('#choosesource').hide();
+	$('#nameRequestPopup').hide();
+	$('#errorPopup').hide();
 	$('#exitPopup').hide();
 }
 

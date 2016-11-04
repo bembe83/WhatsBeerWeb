@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <title>WhatsBeer</title>
 <head>
-<meta http-equiv="Content-Security-Policy" content="default-src * data: gap: 'unsafe-eval'; 
+<meta http-equiv="Content-Security-Policy" content="default-src * data: gap: blob: 'unsafe-eval'; 
 													style-src 'self' 'unsafe-inline';
 													script-src * 'unsafe-inline' 'unsafe-eval';
 													media-src *;">
@@ -34,7 +34,7 @@
 			<div data-role="header" data-position="fixed">
 				<img id="homebtn" src="img/back-arrow.gif" onclick="back()" style="display: none"/>
 				<h1>WhatsBeer</h1>
-				<img id="closebtn" src="img/close.png" onclick="$('#exitPopup').show();" />
+				<img id="closebtn" src="img/close.png" onclick="hideAll(); $('#exitPopup').show();" />
 			</div>
 			<div id="index" data-role="main" class="ui-content">
 				<div id="response">
@@ -48,7 +48,6 @@
 			
 			<!-- Loading Popup -->
 			<div id="loading" class="modal">
-				<!-- Popup content -->
 				<div class="modal-content" style="background-color: rgba(0,0,0,0); text-align=center;">
 					<img id="load_img" src="img/loading-animation_small.gif"/>
 					<p id="loading_text">Loading...</p>
@@ -93,7 +92,7 @@
 			<!--Popup End -->
 			
 			<!-- Beer Name Popup -->
-			<div id="nameRequest" class="modal">
+			<div id="nameRequestPopup" class="modal">
 				<!-- Popup content -->
 				<div class="modal-content">
 					<div class="modal-header">
@@ -105,6 +104,26 @@
 						<input id="name" name="name" type="text">
 						<button onclick="askBeerName(event)">Search</button>
 					</div>
+				</div>
+			</div>
+			<!--Popup End -->
+			
+			<!-- Error Popup -->
+			<div id="errorPopup" class="modal">
+				<!-- Popup content -->
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="close" onclick="showHome();">x</span>
+						<h3>Error</h3>
+					</div>
+					<div class="modal-body">
+					<p id="errorMessage"></p>
+					<div data-role="navbar">
+						<ul>
+							<li><a href="#" onclick="$('#errorPopup').hide();">Ok</a></li>
+						</ul>
+					</div>
+				</div>
 				</div>
 			</div>
 			<!--Popup End -->
