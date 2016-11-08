@@ -34,12 +34,10 @@
 			<div data-role="header" data-position="fixed">
 				<img id="homebtn" src="img/back-arrow.gif" onclick="back()" style="display: none"/>
 				<h1>WhatsBeer</h1>
-				<img id="closebtn" src="img/close.png" onclick="hideAll(); $('#exitPopup').show();" />
+				<img id="closebtn" src="img/close.png" onclick="hideAllPopup(); $('#exitPopup').show();" />
 			</div>
 			<div id="index" data-role="main" class="ui-content">
-				<div id="response">
-				<canvas id="photo"></canvas>
-				</div>
+				<div id="response"></div>
 			</div>
 			<div data-role="footer" style="text-align:center;" data-position="fixed">
 				<input id="selectedFile" data-role="none" type="file" accept="image/*" onchange="picChange(event)" style="display: none;"/>
@@ -47,8 +45,8 @@
 			</div>
 			
 			<!-- Loading Popup -->
-			<div id="loading" class="modal">
-				<div class="modal-content" style="background-color: rgba(0,0,0,0); text-align=center;">
+			<div id="loadingPopup" class="modal">
+				<div id="loading" class="loading-content">
 					<img id="load_img" src="img/loading-animation_small.gif"/>
 					<p id="loading_text">Loading...</p>
 				</div>
@@ -120,7 +118,7 @@
 					<p id="errorMessage"></p>
 					<div data-role="navbar">
 						<ul>
-							<li><a href="#" onclick="$('#errorPopup').hide();">Ok</a></li>
+							<li><a href="#" onclick="showHome();">Ok</a></li>
 						</ul>
 					</div>
 				</div>

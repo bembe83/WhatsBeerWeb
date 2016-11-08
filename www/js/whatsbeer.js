@@ -1,5 +1,5 @@
-var width = screen.width;
-var height = screen.height;
+var width = window.innerWidth;
+var height = window.innerHeight;
 
 var beer_api_key = "a125e6a72b04868a7a2dc9ed2e71b20d";
 var brewery_site = "https://www.bembe.tk/webservice/beers/index.php?key=" + beer_api_key;
@@ -70,18 +70,19 @@ $(document).ready(onLoad);
 
 function onLoad(event){
 	try{
-				
-		if(screen.width > screen.height){
-			height = screen.width;
-			width = screen.height;
+		var img_rescale = 0.6;	
+		var popup_top_padding = 3;
+ 
+		if(window.innerWidth > window.innerHeight){
+			height = window.innerWidth;
+			width = window.innerHeight;
+			img_rescale = 0.50;
+			popup_top_padding = 5;
 		}
 		
-		$('#load_img').attr('width', width * 0.6);
-		$('.modal').css('padding-top', height / 3);
-		
-		$('#name').focusin( function () { $('.modal').css('padding-top', height/6); });
-		$('#name').focusout(function () { $('.modal').css('padding-top', height/3); });
-		
+		$('#load_img').attr('width', width * img_rescale);
+		$('.modal').css('padding-top', height / popup_top_padding);
+			
 		$.ajax({
 			url : main_file,
 			async:false,
@@ -95,19 +96,23 @@ function onLoad(event){
 			complete: showHome
 		});
 		
-		if(typeof navigator.camera === 'undefined')
+		if(!isPhoneGap())
 		{
-			browser = true;
-			$('#btnPhoto').click(function() {
-				if(browser)
-					$('#selectedFile').click();	
-				else
-					$('#chooseSource').show();
-				});
+			brewery_site = brewery_site.replace("bembe.tk/webservice", "whatsbeer.tk");
+			$('#btnPhoto').click(function() { $('#selectedFile').click();} );
+		}
+		else
+			$('#btnPhoto').click(function() { $('#chooseSource').show(); });
+		
+		if(isMobile())
+		{
+			$('#name').focusin( function () { $('.modal').css('padding-top', height/(popup_top_padding*2)); });
+			$('#name').focusout(function () { $('.modal').css('padding-top', height/popup_top_padding); });
 		}
 		
 		loadImageFromFile(logo, function(imageData){
-			logo_image = imageData;
+			logo_image = new Image();
+			logo_image.src = imageData;
 		});
 				
 	}catch(e)
@@ -151,8 +156,8 @@ function getImage(source){
 					//Success
 					console.log("getPicture(): Image successfully retrieved.");
 					//console.log(imageData);
-					drawPhoto("data:image/jpeg;base64,"+imageData.replace("data:image/jpeg;base64,", ""), "photo");
-					loading();
+//					drawPhoto("data:image/jpeg;base64,"+imageData.replace("data:image/jpeg;base64,", ""), "photo");
+					drawPhoto(imageData, "photo");
 					elaborate(imageData);
 				},
 				function(message){
@@ -190,6 +195,7 @@ function picChange(evt){
 			try{
 				loadImageFromFile(windowURL.createObjectURL(fileInput[0]), function(imageData)
 				{
+					drawPhoto(imageData, "photo");
 					elaborate(imageData);
 				});
 				/*console.log("createObjectURL");
@@ -263,7 +269,8 @@ function elaborate(content) {
 		' "requests": [' +
 		'	{ ' +
 		'	  "image": {' +
-		'	    "content":"' + content.replace("data:image/jpeg;base64,", "") + '"' +
+//		'	    "content":"' + content.replace("data:image/jpeg;base64,", "") + '"' +
+		'	    "content":"' + getImageContent(content) + '"' +
 		'	  },' +
 		'	  "features": [' +
 		'	      {' +
@@ -382,7 +389,7 @@ function loadImageFromFile(filename, callback)
 			canvas.width = this.naturalWidth; // or 'width' if you want a special/scaled size
 			canvas.height = this.naturalHeight; // or 'height' if you want a special/scaled size
 			canvas.getContext('2d').drawImage(this, 0, 0);
-			callback(canvas.toDataURL('image/png'));
+			callback(canvas.toDataURL('image/jpeg',0.5));
 		};
 		image.src = filename;
 	}
@@ -396,32 +403,47 @@ function loadImageFromFile(filename, callback)
 function drawPhoto(objPhoto, canvasName){
 
 	var canvas=document.getElementById(canvasName);
-	var ctx=canvas.getContext("2d");
-	
-	canvas.width = width*0.9;
-	canvas.height = height*0.9;
-	
-	//create image
-	var photo = new Image();
-	photo.onload = function(){
-		try{
-			var ratio = (photo.width/photo.height);
-			console.log("ratio:"+ratio);
-			ctx.drawImage(photo, 0, 0, canvas.width, canvas.height*ratio);
-			ctx.drawImage(logo_image, 0, 0, 50, 50);
-		}catch(e){
-			console.log("onload():"+e);
+	if(canvas){
+		var ctx=canvas.getContext("2d");
+		
+		canvas.width = width*0.9;
+		canvas.height = height*0.9;
+		
+		//create image
+		var photo = new Image();
+		photo.onload = function(){
+			try{
+				var ratio = (photo.width/photo.height);
+				console.log("ratio:"+ratio);
+				ctx.drawImage(photo, 0, 0, canvas.width, canvas.height*ratio);
+				ctx.drawImage(logo_image, 0, 0, 50, 50);
+			}catch(e){
+				console.log("onload():"+e);
+			}
 		}
+		
+		photo.src = objPhoto;
 	}
-	
-	photo.src = objPhoto;
+}
+
+function getImageContent(imageData)
+{
+	return imageData.replace(/^data:image\/\w+;base64,/, "");
+}
+
+function isPhoneGap() {
+    return (window.cordova || window.PhoneGap || window.phonegap) 
+    && /^file:\/{3}[^\/]/i.test(window.location.href);
+}
+
+function isMobile(){
+	return navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/);
 }
 
 function showResult(result){
 	$('#response').show();
 	$('#response').html(result).enhanceWithin();
-	$('#loading').hide();
-	$('#photo').hide();
+	$('#loadingPopup').hide();
 	$('#btnPhoto').hide();
 	$('#homebtn').show();
 	$('#choosesource').hide();
@@ -434,8 +456,7 @@ function showResult(result){
 function showHome(){
 	$('#response').show();
 	$('#response').html(main_text).enhanceWithin();
-	$('#loading').hide();
-	$('#photo').show();
+	$('#loadingPopup').hide();
 	$('#btnPhoto').show();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
@@ -446,9 +467,9 @@ function showHome(){
 }
 
 function loading(){	
+	$('#loadingPopup')	
 	$('#response').hide();
-	$('#loading').show();
-	$('#photo').show();
+	$('#loadingPopup').show();
 	$('#btnPhoto').hide();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
@@ -459,8 +480,7 @@ function loading(){
 
 function showError(message){	
 	$('#response').hide();
-	$('#loading').hide();
-	$('#photo').hide();
+	$('#loadingPopup').hide();
 	$('#btnPhoto').hide();
 	$('#homebtn').hide();
 	$('#choosesource').hide();
@@ -471,7 +491,7 @@ function showError(message){
 }
 
 function hideAllPopup(){	
-	$('#loading').hide();
+	$('#loadingPopup').hide();
 	$('#choosesource').hide();
 	$('#nameRequestPopup').hide();
 	$('#errorPopup').hide();
