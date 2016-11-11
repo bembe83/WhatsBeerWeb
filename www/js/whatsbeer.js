@@ -137,7 +137,8 @@ function onLoad(event){
 		});
 
 		$("img").each(function() {
-			this.src = adjustSrc(this.src);			
+			if(this.src.includes("ic_"))
+				this.src = adjustSrc(this.src);			
 		});
 		
 		loadImageFromFile(logo, function(imageData){
