@@ -32,16 +32,20 @@
 	<body>
 		<div data-role="page" id="pageone">
 			<div data-role="header" data-position="fixed">
-				<img id="homebtn" src="img/back-arrow.gif" onclick="back()" style="display: none"/>
+				<img id="homebtn" class="homebtn" src="img/drawable-mdpi/ic_back_arrow.png" onclick="back()" style="display: none"/>
 				<h1>WhatsBeer</h1>
-				<img id="closebtn" src="img/close.png" onclick="hideAllPopup(); $('#exitPopup').show();" />
+				<img id="closebtn" class="closebtn" src="img/drawable-mdpi/ic_close.png" onclick="hideAllPopup(); $('#exitPopup').show();"/>
 			</div>
 			<div id="index" data-role="main" class="ui-content">
 				<div id="response"></div>
 			</div>
 			<div data-role="footer" style="text-align:center;" data-position="fixed">
 				<input id="selectedFile" data-role="none" type="file" accept="image/*" onchange="picChange(event)" style="display: none;"/>
-				<button id="btnPhoto" class="ui-btn ui-icon-camera ui-btn-icon-left">Upload or Take a Photo</button>
+				<button id="btnPhoto" class="ui-btn ui-icon-folder ui-btn-icon-left" onclick="$('#selectedFile').click();">Select Logo</button>
+				<div class="foot_buttons" id="foot_buttons">
+					<img id="folder" src="img/drawable-mdpi/ic_folder.png" onclick="loadPhoto();"/>
+					<img id="camera" src="img/drawable-mdpi/ic_camera.png" onclick="shootPhoto();"/>
+				</div>
 			</div>
 			
 			<!-- Loading Popup -->
