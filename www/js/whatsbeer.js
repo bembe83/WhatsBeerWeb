@@ -2,7 +2,7 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 var beer_api_key = "a125e6a72b04868a7a2dc9ed2e71b20d";
-var brewery_site = "https://www.bembe.tk/webservice/beers/index.php?key=" + beer_api_key;
+var brewery_site = "https://whatsbeer.tk/beers/index.php?key=" + beer_api_key;
 
 var google_api_key = "AIzaSyBaEXwP1p1cnCnHqzF7TSjgIlV9S2F3aPs"
 var CV_URL = "https://vision.googleapis.com/v1/images:annotate?key=" + google_api_key;
@@ -50,6 +50,11 @@ window.addEventListener('popstate', function(event) {
 
 window.addEventListener('offline', function(event) {
 	alert('No internet connection so the functionality will remain disable till the connection will be active again!');
+	
+	$('#btnPhoto').unbind("click");
+	$('#folder').unbind("click");
+	$('#camera').unbind("click");
+	
 	$('#btnPhoto').click(function() {
 		$('#chooseSource').hide();
 		alert('No internet connection so the functionality will remain disable till the connection will be active again!');
@@ -65,6 +70,11 @@ window.addEventListener('offline', function(event) {
 }, false);
 
 window.addEventListener('online', function(event) {
+	
+	$('#btnPhoto').unbind("click");
+	$('#folder').unbind("click");
+	$('#camera').unbind("click");
+	
 	$('#btnPhoto').click(function() {
 		$('#selectedFile').click();	
 	});
@@ -90,7 +100,6 @@ function onLoad(event){
 			
 		if(!isPhoneGap())
 		{
-			brewery_site = brewery_site.replace("bembe.tk/webservice", "whatsbeer.tk");
 			if(!useSecure())
 				brewery_site = brewery_site.replace("https:", "http:");
 			$('#btnPhoto').show();
