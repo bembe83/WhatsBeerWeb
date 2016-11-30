@@ -16,8 +16,9 @@ var logo_image;
 var default_density = "mdpi";
 var default_path = "img/drawable-"+default_density+"/";
 
-var logo = default_path + "ic_launcher.png";
-var tts_ico = default_path + "ic_tts.png";
+var logo;
+var unknown_pic;
+var tts_ico;
 
 var main_text;
 var button_bar;
@@ -101,8 +102,10 @@ function onLoad(event){
 	try{
 		
 		adjustSrc(default_path);
-		adjustSrc(logo);
-		adjustSrc(tts_ico);
+		
+		logo = default_path + "ic_launcher.png";
+		unknown_pic = default_path + "ic_unknown_beer_logo.png";
+		tts_ico = default_path + "ic_tts.png";
 			
 		if(!isPhoneGap())
 		{
@@ -365,7 +368,7 @@ function searchbeer(beerName)
 								logo_img = logo_img_tag.replace("<src>", json.data[i].labels.medium);
 							}
 							else
-								logo_img = logo_img_tag.replace("<src>", logo);
+								logo_img = logo_img_tag.replace("<src>", unknown_pic);
 							
 							if(json.data[i].name)
 							{
