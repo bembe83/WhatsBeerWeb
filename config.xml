@@ -7,7 +7,7 @@
         id        = "com.whatsbeer.tk"
         version   = "1.0.0">
 
-    <name>WhatsBeerWeb</name>
+    <name>WhatsBeer</name>
 
     <description>
         
@@ -67,9 +67,6 @@
     
 	<!-- Core plugins -->
     <plugin name="cordova-plugin-battery-status" />
-    <!--<plugin name="cordova-plugin-camera" />-->
-	<!--<plugin name="cordova-plugin-camera-with-exif" />-->
-	<!--<plugin name="cordova-custom-config" />-->
 	<plugin name="cordova-plugin-media-capture" />
     <plugin name="cordova-plugin-console" />
     <plugin name="cordova-plugin-contacts" />
