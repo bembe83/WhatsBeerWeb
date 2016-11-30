@@ -2,7 +2,7 @@ var width = window.innerWidth;
 var height = window.innerHeight;
 
 var beer_api_key = "a125e6a72b04868a7a2dc9ed2e71b20d";
-var brewery_site = "https://whatsbeer.tk/beers/index.php?key=" + beer_api_key;
+var brewery_site = "https://www.whatsbeer.tk/beers/index.php?key=" + beer_api_key;
 
 var google_api_key = "AIzaSyBaEXwP1p1cnCnHqzF7TSjgIlV9S2F3aPs"
 var CV_URL = "https://vision.googleapis.com/v1/images:annotate?key=" + google_api_key;
@@ -11,10 +11,13 @@ var type="LOGO_DETECTION";
 var max_results = 1;
 
 var main_file = "main.html";
-var logo = "ic_launcher.png";
 var logo_image;
-var tts_ico = "ic_tts.png";
+
 var default_density = "mdpi";
+var default_path = "img/drawable-"+default_density+"/";
+
+var logo = default_path + "ic_launcher.png";
+var tts_ico = default_path + "ic_tts.png";
 
 var main_text;
 var button_bar;
@@ -81,10 +84,12 @@ window.addEventListener('online', function(event) {
 		
 	$('#folder').click(function() {
 		loadPhoto();
+		return false;
 	});
 	
 	$('#camera').click(function() {
 		shootPhoto();
+		return false;
 	});
 }, false);
 
@@ -95,13 +100,17 @@ $(document).ready(onLoad);
 function onLoad(event){
 	try{
 		
-		logo = getSrc()+logo;
-		tts_ico = getSrc()+tts_ico;
+		adjustSrc(default_path);
+		adjustSrc(logo);
+		adjustSrc(tts_ico);
 			
 		if(!isPhoneGap())
 		{
 			if(!useSecure())
 				brewery_site = brewery_site.replace("https:", "http:");
+			if(!useWWW())
+				brewery_site = brewery_site.replace("www.", "");
+			
 			$('#btnPhoto').show();
 			$('#foot_buttons').hide();
 			button_bar = $('#btnPhoto');
@@ -145,9 +154,8 @@ function onLoad(event){
 			complete: showHome
 		});
 
-		$("img").each(function() {
-			if(this.src.includes("ic_"))
-				this.src = adjustSrc(this.src);			
+		$("img[src^='ic_']").each(function() {
+			this.src = adjustSrc(this.src);	
 		});
 		
 		loadImageFromFile(logo, function(imageData){
@@ -436,7 +444,7 @@ function drawPhoto(objPhoto, canvasName){
 				ctx.drawImage(photo, 0, 0, canvas.width, canvas.height*ratio);
 				ctx.drawImage(logo_image, 0, 0, 50, 50);
 			}catch(e){
-				console.log("onload():"+e);
+				console.log("drawPhoto():"+e);
 			}
 		}
 		
@@ -458,6 +466,10 @@ function useSecure(){
 	return /^https:\/{2}[^\/]/i.test(window.location.href);
 }
 
+function useWWW(){
+	return /^www.[^\/]/i.test(window.location.hostname);
+}
+
 function isMobile(){
 	return navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/);
 }
@@ -469,13 +481,13 @@ function adjustSrc(image_path) {
         density ="hdpi";
         break;
 	case 2:
-        density ="xdpi";
+        density ="xhdpi";
         break;
 	case 3:
-        density ="xxdpi";
+        density ="xxhdpi";
         break;
 	case 4:
-       density ="xxxdpi";
+       density ="xxxhdpi";
         break;
     default:
         break;
@@ -484,11 +496,6 @@ function adjustSrc(image_path) {
 	image_path=image_path.replace(default_density+"/",density+"/");
     return image_path;
 }  
-
-function getSrc()
-{
-	return adjustSrc("img/drawable-mdpi/");
-}
 
 function showResult(result){
 	hideAll();
